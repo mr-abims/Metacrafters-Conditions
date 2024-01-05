@@ -3,7 +3,8 @@ pragma solidity ^0.8.0;
 
 contract Conditions {
     address public owner;
-    mapping(address => uint256) public balances;
+    uint256 public balance;
+    mapping(address => uint256) public userDeposit;
 
     constructor() {
         owner = msg.sender;
@@ -13,27 +14,26 @@ contract Conditions {
         if (msg.value <= 0) {
             revert("Amount should be greater than zero");
         }
-        balances[msg.sender] += msg.value;
+        userDeposit[msg.sender] += msg.value;
+        balance+= msg.value;
 
     }
 
     function withdraw(uint256 amount) external {
         assert(msg.sender ==owner);
-        require(amount > 0, "Amount should be greater than zero");
-        if(balances[msg.sender] <= amount) {
-            revert("Insufficient balance");
-        } 
-
-        balances[msg.sender] -= amount;
+        require(amount <= balance, "Amount should be less than balance");
+        balance -= amount;
+        payable(msg.sender).transfer(amount);
     }
 
 
-    function assertion() external pure returns (uint256) {
-        uint256 x = 1;
-        uint256 y = 2;
-
-        assert(x != y); // Assertion to check if x is not equal to y
-
-        return x;
+    unction greaterNumber(uint256 a, uint256 b) external pure returns (uint256) {
+        assert(a != b); 
+        if (a > b) {
+            return a;
+        } else {
+            return b;
+        }
     }
+
 }
