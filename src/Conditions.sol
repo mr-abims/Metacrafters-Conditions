@@ -27,7 +27,7 @@ contract Conditions {
     }
 
 
-    unction greaterNumber(uint256 a, uint256 b) external pure returns (uint256) {
+    function greaterNumber(uint256 a, uint256 b) external pure returns (uint256) {
         assert(a != b); 
         if (a > b) {
             return a;
